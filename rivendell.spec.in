@@ -479,6 +479,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/rdmarkerset.8.gz
 %{_mandir}/man8/rdservice.8.gz
 %{_mandir}/man8/rdautoback.8.gz
+%{_mandir}/man8/rdautocheck.8.gz
 %{_mandir}/man8/rdautorest.8.gz
 @DOC_PATH@/*
 %{_libdir}/librd-@VERSION@.so
@@ -500,6 +501,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/rdsinglestart
 %{_sbindir}/rddbmgr
 %{_sbindir}/rdautoback
+%{_sbindir}/rdautocheck
 %{_sbindir}/rdautorest
 @HPI_FILE1@
 @HPI_FILE2@

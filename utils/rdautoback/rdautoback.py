@@ -21,6 +21,8 @@
 #
 
 import configparser
+import datetime
+import MySQLdb
 import os
 from pathlib import Path
 import sys
@@ -69,6 +71,42 @@ os.system(command=cmd)
 #
 cmd='rsync -av --delete /var/snd '+mountpoint
 os.system(command=cmd)
+
+#
+# Generate Info File
+#
+with open(mountpoint+'/INFO.txt','w') as f:
+    f.write('[Backup]\n')
+    f.write('Name='+mountpoint+'\n')
+    with os.popen('date --iso-8601=seconds',mode='r') as f1:
+        f.write('DateTime='+f1.read())
+        f1.close()
+    try:
+        db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
+                           passwd=rd_config.get('mySQL','Password'),
+                           host=rd_config.get('mySQL','Hostname'),
+                           database=rd_config.get('mySQL','Database'),
+                           charset='utf8mb4')
+    except TypeError:
+        db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
+                           password=rd_config.get('mySQL','Password'),
+                           host=rd_config.get('mySQL','Hostname'),
+                           database=rd_config.get('mySQL','Database'),
+                           charset='utf8mb4')
+    cursor=db.cursor()
+    cursor.execute('select `REALM_NAME` from `SYSTEM`')
+    f.write('RealmName='+cursor.fetchone()[0]+'\n')
+    cursor.execute('select `DB` from `VERSION`')
+    f.write('DatabaseSchema='+str(cursor.fetchone()[0])+'\n')
+    db.close()
+    with os.popen('du -h '+mountpoint+'/snd',mode='r') as f1:
+        values=f1.read().split('\t')
+        f.write('AudioStorage='+values[0]+'\n')
+        f1.close()
+    with os.popen('ls -1 '+mountpoint+'/snd | wc -l') as f1:
+        f.write('AudioFiles='+f1.read())
+        f1.close()
+    f.close()
 
 #
 # Unmount backup device

@@ -24930,3 +24930,5 @@
 	run on Python 3.6.
 	* Fixed a regression in rdautorest(8) that caused it to crash when
 	run on Python 3.6.
+2024-11-05 Fred Gleason <fredg@paravelsystems.com>
+	* Added a rdautocheck(8) utility.
