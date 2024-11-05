@@ -48,16 +48,6 @@ else:
         print(USAGE)
         exit(1)
 
-if(not yes):
-    print('WARNING: This operation will COMPLETELY OVERWRITE the existing')
-    print('         Rivendell data on this system, replacing it with the')
-    print('         contents of the specified data backup. This operation')
-    print('         cannot be undone!')
-    print('')
-    resp=input('        Are you sure you want to proceed (y/N)?')
-    if((resp.upper()!='Y')and(resp.upper()!='YES')):
-        exit(0)
-
 #
 # Load rd.conf(5)
 #
@@ -68,20 +58,45 @@ rd_config.read_file(open('/etc/rd.conf'))
 # Open the syslog
 #
 syslog.openlog('rdautorest.py',logoption=syslog.LOG_PID|syslog.LOG_PERROR,facility=int(rd_config.get('Identity','SyslogFacility',fallback=syslog.LOG_USER)))
-syslog.syslog(syslog.LOG_INFO,'Starting Rivendell restore from "'+mountpoint+'"')
 
-    
 #
 # Mount backup device
 #
-result=os.system(command='findmnt '+mountpoint)
-if(os.WEXITSTATUS(result)!=0):
-    Path(mountpoint).mkdir(parents=True,exist_ok=True)
-    result=os.system(command='mount '+mountpoint)
-    if(os.WEXITSTATUS(result)!=0):
-        syslog.syslog(syslog.LOG_ERR,'unable to mount backup drive')
-        exit(1)
-    os.system(command='sleep 5')
+Path(mountpoint).mkdir(parents=True,exist_ok=True)
+result=os.WEXITSTATUS(os.system(command='mount '+mountpoint+" 2> /dev/null"))
+if((result!=0)and(result!=64)):
+    syslog.syslog(syslog.LOG_ERR,'unable to mount backup drive')
+    exit(1)
+os.system(command='sleep 5')
+
+#
+# Print warning message
+#
+if(not yes):
+    try:
+        with open(mountpoint+'/INFO.txt','r') as f:
+            print('WARNING!')
+            print('This operation will COMPLETELY OVERWRITE the existing')
+            print('Rivendell data on this system, replacing it with the')
+            print('contents of the following data backup:')
+            print()
+            print(f.read())
+            f.close()
+            print('This operation cannot be undone!')
+    except FileNotFoundError:
+        print('WARNING!')
+        print('This operation will COMPLETELY OVERWRITE the existing')
+        print('Rivendell data on this system, replacing it with the')
+        print('contents of the specified data backup. This operation')
+        print('cannot be undone!')
+    print('')
+    resp=input('Are you sure you want to proceed (y/N)?')
+    if((resp.upper()!='Y')and(resp.upper()!='YES')):
+        os.system(command='umount '+mountpoint)
+        os.rmdir(mountpoint)
+        exit(0)
+
+syslog.syslog(syslog.LOG_INFO,'Starting Rivendell restore from "'+mountpoint+'"')
 
 #
 # Stop Rivendell service

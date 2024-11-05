@@ -24935,3 +24935,6 @@
 2024-11-05 Fred Gleason <fredg@paravelsystems.com>
 	* Modified rdautoback(8) so as to be able to take multiple mount
 	point arguments.
+2024-11-05 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to display the metadata of the proposed backup
+	to restore in the warning message in rdautorest(8).
