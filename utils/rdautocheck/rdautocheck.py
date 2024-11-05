@@ -66,4 +66,3 @@ if(len(sys.argv)<2):
     exit(1)
 for arg in range(1,len(sys.argv)):
     PrintMetadata(sys.argv[arg])
-

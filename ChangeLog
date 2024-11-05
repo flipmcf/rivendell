@@ -24932,3 +24932,6 @@
 	run on Python 3.6.
 2024-11-05 Fred Gleason <fredg@paravelsystems.com>
 	* Added a rdautocheck(8) utility.
+2024-11-05 Fred Gleason <fredg@paravelsystems.com>
+	* Modified rdautoback(8) so as to be able to take multiple mount
+	point arguments.

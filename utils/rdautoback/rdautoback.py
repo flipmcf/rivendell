@@ -28,12 +28,80 @@ from pathlib import Path
 import sys
 import syslog
 
-USAGE='rdbackup.py <backup-mountpoint>'
+def BackupMountpoint(mntpt):
+    #
+    # Mount backup device
+    #
+    Path(mntpt).mkdir(parents=True,exist_ok=True)
+    result=os.WEXITSTATUS(os.system(command='mount '+mntpt+" 2> /dev/null"))
+    if((result!=0)and(result!=64)):
+        print(mntpt+': [not found]')
+        print()
+        return
+    os.system(command='sleep 5')
+    syslog.syslog(syslog.LOG_INFO,'Starting Rivendell backup to "'+mntpt+'"')
 
-if(len(sys.argv)!=2):
+    #
+    # Dump database
+    #
+    cmd='mysqldump -h '+rd_config.get('mySQL','Hostname')+' -u '+rd_config.get('mySQL','Loginname')+' -p'+rd_config.get('mySQL','Password')+' '+rd_config.get('mySQL','Database')+' | gzip > '+mntpt+'/db.sql.gz'
+    os.system(command=cmd)
+
+    #
+    # Copy Audio Store
+    #
+    cmd='rsync -av --delete /var/snd '+mntpt
+    os.system(command=cmd)
+
+    #
+    # Generate Info File
+    #
+    with open(mntpt+'/INFO.txt','w') as f:
+        f.write('[Backup]\n')
+        f.write('Name='+mntpt+'\n')
+        with os.popen('date --iso-8601=seconds',mode='r') as f1:
+            f.write('DateTime='+f1.read())
+            f1.close()
+        try:
+            db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
+                               passwd=rd_config.get('mySQL','Password'),
+                               host=rd_config.get('mySQL','Hostname'),
+                               database=rd_config.get('mySQL','Database'),
+                               charset='utf8mb4')
+        except TypeError:
+            db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
+                               password=rd_config.get('mySQL','Password'),
+                               host=rd_config.get('mySQL','Hostname'),
+                               database=rd_config.get('mySQL','Database'),
+                               charset='utf8mb4')
+        cursor=db.cursor()
+        cursor.execute('select `REALM_NAME` from `SYSTEM`')
+        f.write('RealmName='+cursor.fetchone()[0]+'\n')
+        cursor.execute('select `DB` from `VERSION`')
+        f.write('DatabaseSchema='+str(cursor.fetchone()[0])+'\n')
+        db.close()
+        with os.popen('du -h '+mntpt+'/snd',mode='r') as f1:
+            values=f1.read().split('\t')
+            f.write('AudioStorage='+values[0]+'\n')
+            f1.close()
+        with os.popen('ls -1 '+mntpt+'/snd | wc -l') as f1:
+            f.write('AudioFiles='+f1.read())
+            f1.close()
+        f.close()
+
+    #
+    # Unmount backup device
+    #
+    os.system(command='umount '+mntpt)
+    os.rmdir(mntpt)
+
+    syslog.syslog(syslog.LOG_INFO,'Completed Rivendell backup to "'+mntpt+'"')
+
+USAGE='rdbackup.py <backup-mntpt1> [<backup-mntpt2>] [...]'
+
+if(len(sys.argv)<2):
     print(USAGE)
     exit(1)
-mountpoint=sys.argv[1]
 
 #
 # Load rd.conf(5)
@@ -44,74 +112,7 @@ rd_config.read_file(open('/etc/rd.conf'))
 #
 # Open the syslog
 #
-syslog.openlog('rdautoback.py',logoption=syslog.LOG_PID|syslog.LOG_PERROR,facility=int(rd_config.get('Identity','SyslogFacility',fallback=syslog.LOG_USER)))
-syslog.syslog(syslog.LOG_INFO,'Starting Rivendell backup to "'+mountpoint+'"')
+syslog.openlog('rdautoback.py',logoption=syslog.LOG_PERROR,facility=int(rd_config.get('Identity','SyslogFacility',fallback=syslog.LOG_USER)))
 
-    
-#
-# Mount backup device
-#
-result=os.system(command='findmnt '+mountpoint)
-if(os.WEXITSTATUS(result)!=0):
-    Path(mountpoint).mkdir(parents=True,exist_ok=True)
-    result=os.system(command='mount '+mountpoint)
-    if(os.WEXITSTATUS(result)!=0):
-        syslog.syslog(syslog.LOG_ERR,'unable to mount backup drive')
-        exit(1)
-    os.system(command='sleep 5')
-
-#
-# Dump database
-#
-cmd='mysqldump -h '+rd_config.get('mySQL','Hostname')+' -u '+rd_config.get('mySQL','Loginname')+' -p'+rd_config.get('mySQL','Password')+' '+rd_config.get('mySQL','Database')+' | gzip > '+mountpoint+'/db.sql.gz'
-os.system(command=cmd)
-
-#
-# Copy Audio Store
-#
-cmd='rsync -av --delete /var/snd '+mountpoint
-os.system(command=cmd)
-
-#
-# Generate Info File
-#
-with open(mountpoint+'/INFO.txt','w') as f:
-    f.write('[Backup]\n')
-    f.write('Name='+mountpoint+'\n')
-    with os.popen('date --iso-8601=seconds',mode='r') as f1:
-        f.write('DateTime='+f1.read())
-        f1.close()
-    try:
-        db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
-                           passwd=rd_config.get('mySQL','Password'),
-                           host=rd_config.get('mySQL','Hostname'),
-                           database=rd_config.get('mySQL','Database'),
-                           charset='utf8mb4')
-    except TypeError:
-        db=MySQLdb.connect(user=rd_config.get('mySQL','Loginname'),
-                           password=rd_config.get('mySQL','Password'),
-                           host=rd_config.get('mySQL','Hostname'),
-                           database=rd_config.get('mySQL','Database'),
-                           charset='utf8mb4')
-    cursor=db.cursor()
-    cursor.execute('select `REALM_NAME` from `SYSTEM`')
-    f.write('RealmName='+cursor.fetchone()[0]+'\n')
-    cursor.execute('select `DB` from `VERSION`')
-    f.write('DatabaseSchema='+str(cursor.fetchone()[0])+'\n')
-    db.close()
-    with os.popen('du -h '+mountpoint+'/snd',mode='r') as f1:
-        values=f1.read().split('\t')
-        f.write('AudioStorage='+values[0]+'\n')
-        f1.close()
-    with os.popen('ls -1 '+mountpoint+'/snd | wc -l') as f1:
-        f.write('AudioFiles='+f1.read())
-        f1.close()
-    f.close()
-
-#
-# Unmount backup device
-#
-os.system(command='umount '+mountpoint)
-os.rmdir(mountpoint)
-
-syslog.syslog(syslog.LOG_INFO,'Completed Rivendell backup to "'+mountpoint+'"')
+for arg in range(1,len(sys.argv)):
+    BackupMountpoint(sys.argv[arg])

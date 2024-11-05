@@ -6,7 +6,7 @@
   <refmeta>
     <refentrytitle>rdautoback</refentrytitle>
     <manvolnum>8</manvolnum>
-    <refmiscinfo class='source'>October 2024</refmiscinfo>
+    <refmiscinfo class='source'>November 2024</refmiscinfo>
     <refmiscinfo class='manual'>Linux Audio Manual</refmiscinfo>
   </refmeta>
   <refnamediv>
@@ -30,7 +30,9 @@
   <refsynopsisdiv id='synopsis'>
     <cmdsynopsis>
       <command>rdautoback</command>
-      <arg choice='req'><replaceable>mount-pt</replaceable></arg>
+      <arg choice='req'><replaceable>mount-pt1</replaceable></arg>
+      <arg choice='opt'><replaceable>mount-pt2</replaceable></arg>
+      <arg choice='top'>...</arg>
       <sbr/>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -42,12 +44,12 @@
     (database+audiostore) used by the Rivendell Radio Automation System.
   </para>
   <para>
-    <command>rdautoback</command><manvolnum>8</manvolnum> takes exactly one
-    argument: the name of a storage mount point that has been configured
-    in <command>fstab</command><manvolnum>5</manvolnum>. Upon startup,
-    <command>rdautoback</command><manvolnum>8</manvolnum> will attempt to
-    mount the specified mount point and make a copy of the following
-    Rivendell data elements:
+    <command>rdautoback</command><manvolnum>8</manvolnum> takes one or more
+    arguments; each the path name of a storage mount point that has been
+    configured in <command>fstab</command><manvolnum>5</manvolnum>.
+    Upon startup, it will attempt to mount the filesystem corresponding to
+    each specified mount point and make a copy of the following Rivendell
+    data elements:
   </para>
   <itemizedlist mark="opencircle">
     <listitem>
@@ -81,6 +83,14 @@
   ,
   <citerefentry>
     <refentrytitle>rd.conf</refentrytitle><manvolnum>5</manvolnum>
+  </citerefentry>
+  ,
+  <citerefentry>
+    <refentrytitle>rdautorest</refentrytitle><manvolnum>8</manvolnum>
+  </citerefentry>
+  ,
+  <citerefentry>
+    <refentrytitle>rdautocheck</refentrytitle><manvolnum>8</manvolnum>
   </citerefentry>
   </para>
   </refsect1>
