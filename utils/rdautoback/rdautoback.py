@@ -50,10 +50,10 @@ syslog.syslog(syslog.LOG_INFO,'Starting Rivendell backup to "'+mountpoint+'"')
 # Mount backup device
 #
 result=os.system(command='findmnt '+mountpoint)
-if(os.waitstatus_to_exitcode(result)!=0):
+if(os.WEXITSTATUS(result)!=0):
     Path(mountpoint).mkdir(parents=True,exist_ok=True)
     result=os.system(command='mount '+mountpoint)
-    if(os.waitstatus_to_exitcode(result)!=0):
+    if(os.WEXITSTATUS(result)!=0):
         syslog.syslog(syslog.LOG_ERR,'unable to mount backup drive')
         exit(1)
     os.system(command='sleep 5')

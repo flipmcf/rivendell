@@ -24925,3 +24925,8 @@
 	* Incremented the package version to 4.3.0int6.
 2024-10-23 Fred Gleason <fredg@paravelsystems.com>
 	* Added an 'hpiplayout_test' command in 'tests/'.
+2024-11-05 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a regression in rdautoback(8) that caused it to crash when
+	run on Python 3.6.
+	* Fixed a regression in rdautorest(8) that caused it to crash when
+	run on Python 3.6.
