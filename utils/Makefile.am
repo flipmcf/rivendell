@@ -2,7 +2,7 @@
 ##
 ## Automake.am for rivendell/utils
 ##
-##   (C) Copyright 2002-2022 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2002-2024 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as
@@ -25,6 +25,7 @@ if ALSA_RD_AM
 endif
 SUBDIRS = $(ALSACONFIG_RD_OPT)\
           rdautoback\
+          rdautocheck\
           rdautorest\
           rdcheckcuts\
           rdcleandirs\

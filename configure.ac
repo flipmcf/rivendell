@@ -3,7 +3,7 @@ dnl
 dnl Autoconf configuration for Rivendell.
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2002-2023 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2002-2024 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -688,6 +688,7 @@ AC_CONFIG_FILES([rivendell.spec \
     utils/Makefile \
     utils/rdalsaconfig/Makefile \
     utils/rdautoback/Makefile \
+    utils/rdautocheck/Makefile \
     utils/rdautorest/Makefile \
     utils/rdcheckcuts/Makefile \
     utils/rdcleandirs/Makefile \

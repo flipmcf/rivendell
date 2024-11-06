@@ -118,7 +118,6 @@ man_MANS = rdadmin.1\
            rdautoback.8\
            rdautorest.8\
            rdautocheck.8\
-           rdautocheck.8\
            rdclilogedit.1\
            rd.conf.5\
            rdconvert.1\
