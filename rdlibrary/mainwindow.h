@@ -27,7 +27,7 @@ class MainWindow : public RDMainWindow
 {
   Q_OBJECT;
  public:
-  MainWindow(const QString &cmdname,RDConfig *c,Qt::WindowFlags f=0);
+  MainWindow(const QString &cmdname,RDConfig *c,Qt::WindowFlags f=Qt::WindowFlags());
   bool showNoteBubbles() const;
   void setShowNoteBubbles(bool state);
   bool dragEnabled() const;
