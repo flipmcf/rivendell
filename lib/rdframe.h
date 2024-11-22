@@ -29,8 +29,8 @@ class RDFrame : public QFrame, public RDFontEngine
 {
   Q_OBJECT;
  public:
-  RDFrame(QWidget *parent=0,Qt::WindowFlags f=0);
-  RDFrame(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=0);
+  RDFrame(QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
+  RDFrame(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
 };
 
 
