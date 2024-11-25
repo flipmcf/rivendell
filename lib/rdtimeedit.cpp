@@ -206,7 +206,7 @@ void RDTimeEdit::stepBy(int steps)
       d_step_enabled=QTimeEdit::stepEnabled();
     }
     else {
-      d_step_enabled=0;
+      d_step_enabled=StepNone;
       if(tenths>tenths_lo_limit) {
 	d_step_enabled=d_step_enabled|StepDownEnabled;
       }
