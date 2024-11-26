@@ -86,7 +86,7 @@ bool RDReport::ExportResultsReport(const QString &filename,
 
     // Title / Artist
     *strm << QString().
-      sprintf("\"%-23s  %-25s\",",
+      asprintf("\"%-23s  %-25s\",",
 	      q->value(5).toString().left(23).toUtf8().constData(),
 	      q->value(6).toString().left(25).toUtf8().constData());
 
