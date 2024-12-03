@@ -85,8 +85,7 @@ bool RDReport::ExportResultsReport(const QString &filename,
     *strm << QString::asprintf("%03d,",q->value(4).toInt());
 
     // Title / Artist
-    *strm << QString().
-      asprintf("\"%-23s  %-25s\",",
+    *strm << QString::asprintf("\"%-23s  %-25s\",",
 	      q->value(5).toString().left(23).toUtf8().constData(),
 	      q->value(6).toString().left(25).toUtf8().constData());
 
