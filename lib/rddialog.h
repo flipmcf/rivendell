@@ -29,8 +29,8 @@ class RDDialog : public QDialog, public RDFontEngine
 {
   Q_OBJECT;
  public:
-  RDDialog(QWidget *parent=0,Qt::WindowFlags f=0);
-  RDDialog(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=0);
+  RDDialog(QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
+  RDDialog(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
 };
 
 

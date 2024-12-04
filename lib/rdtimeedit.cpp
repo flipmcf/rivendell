@@ -136,7 +136,7 @@ void RDTimeEdit::fixup(QString &input) const
   // Don't allow higher precision than tenths of a second
   //
   if(d_show_tenths) {
-    QStringList f0=input.split(".",QString::KeepEmptyParts);
+    QStringList f0=input.split(".",Qt::KeepEmptyParts);
     if(f0.size()==2) {
       QStringList f1=f0.at(1).split(" ");
       if(f1.at(0).length()>1) {
@@ -206,7 +206,7 @@ void RDTimeEdit::stepBy(int steps)
       d_step_enabled=QTimeEdit::stepEnabled();
     }
     else {
-      d_step_enabled=0;
+      d_step_enabled=StepNone;
       if(tenths>tenths_lo_limit) {
 	d_step_enabled=d_step_enabled|StepDownEnabled;
       }

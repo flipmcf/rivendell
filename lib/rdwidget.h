@@ -29,8 +29,8 @@ class RDWidget : public QWidget, public RDFontEngine
 {
   Q_OBJECT;
  public:
-  RDWidget(QWidget *parent=0,Qt::WindowFlags f=0);
-  RDWidget(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=0);
+  RDWidget(QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
+  RDWidget(RDConfig *config,QWidget *parent=0,Qt::WindowFlags f=Qt::WindowFlags());
   QPixmap backgroundPixmap() const;
   void setBackgroundPixmap(const QPixmap &pix);
 

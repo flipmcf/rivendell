@@ -34,8 +34,8 @@ class RDMainWindow : public RDWidget
 {
   Q_OBJECT;
  public:
-  RDMainWindow(const QString &cmdname,Qt::WindowFlags f=0);
-  RDMainWindow(const QString &cmdname,RDConfig *c,Qt::WindowFlags f=0);
+  RDMainWindow(const QString &cmdname,Qt::WindowFlags f=Qt::WindowFlags());
+  RDMainWindow(const QString &cmdname,RDConfig *c,Qt::WindowFlags f=Qt::WindowFlags());
   ~RDMainWindow();
   bool loadSettings(bool apply_geometry);
   bool saveSettings() const;
