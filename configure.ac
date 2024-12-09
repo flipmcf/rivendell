@@ -636,6 +636,7 @@ AC_CONFIG_FILES([rivendell.spec \
     apis/rivwebpyapi/tests/Makefile \
     lib/rdpaths.h \
     lib/Makefile \
+    lib/tests/Makefile \
     rdhpi/Makefile \
     cae/Makefile \
     web/Makefile \
