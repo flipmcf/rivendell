@@ -88,6 +88,8 @@ AC_ARG_ENABLE(rdxport-debug,[  --enable-rdxport-debug  enable DEBUG support for 
 		      [RDXPORT_DEBUG_ENABLED=yes],[])
 AC_ARG_ENABLE(i18n-updates,[  --enable-i18n-updates   enable I18N metadata updates],
 		      [I18N_ENABLED=yes],[])
+AC_ARG_ENABLE(tests,[  --enable-testing   enable rivendell test suite],
+		      [TEST_ENABLED=yes],[])
 
 
 #
@@ -548,6 +550,17 @@ fi
 AC_SUBST(RPM_DATESTAMP,`date +%a\ %b\ %d\ %Y`)
 
 #
+# Configure Testing suite
+#
+PKG_CHECK_MODULES(GOOGLETEST, [gtest_main], [GTEST_FOUND=yes],[GTEST_NOT_FOUND=yes])
+if test -z $TEST_ENABLED ; then
+  if test -z $GTEST_FOUND ; then
+    AC_MSG_ERROR([*** googletest not found, but is needed for testing support ***])
+  fi
+fi
+  
+
+#
 # Generated File Warnings
 #
 AC_SUBST_FILE(GENERATED_C_FILE_WARNING)
@@ -636,7 +649,6 @@ AC_CONFIG_FILES([rivendell.spec \
     apis/rivwebpyapi/tests/Makefile \
     lib/rdpaths.h \
     lib/Makefile \
-    lib/tests/Makefile \
     rdhpi/Makefile \
     cae/Makefile \
     web/Makefile \
