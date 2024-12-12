@@ -1,6 +1,11 @@
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-TEST(rdcaeTest, ConnectHost){
+
+int main(void){
+    
     EXPECT_EQ(false, true);
+    
+    
+    return 0;
 }

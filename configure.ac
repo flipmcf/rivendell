@@ -556,6 +556,10 @@ PKG_CHECK_MODULES(GOOGLETEST, [gtest_main], [GTEST_FOUND=yes],[GTEST_NOT_FOUND=y
 if [[ "$TEST_ENABLED" == "yes" ]]; then
   if test -z $GTEST_FOUND ; then
     AC_MSG_ERROR([*** googletest not found, but is needed for testing support ***])
+  else
+    AC_CONFIG_FILES([
+        tests/lib/Makefile \
+    ])
   fi
 fi
   
@@ -730,6 +734,8 @@ AC_CONFIG_FILES([rivendell.spec \
     xdg/rddbconfig-root-consolehelper \
     build_debs.sh \
     ])
+
+
 AC_OUTPUT()
 
 chmod 755 helpers/rdi18n_helper.sh
@@ -763,6 +769,9 @@ AC_MSG_NOTICE("|---------------------------------------------------------|")
 AC_MSG_NOTICE("| Platform Information:                                   |")
 AC_MSG_NOTICE("$DISTRO_NAME")
 AC_MSG_NOTICE("$DISTRO_FAMILY")
+if test $TEST_ENABLED ; then
+AC_MSG_NOTICE("|                    Test Suite Compilation ... Yes       |")
+fi
 if test $I18N_ENABLED ; then
 AC_MSG_NOTICE("|                          Update I18N Data ... Yes       |")
 else
