@@ -1,0 +1,22 @@
+Rivendell Test Suite
+
+These files are only necessary to run when developing and testing changes
+to rivendell source code.
+
+to run tests, use `make test` (or `make check`) to run the test suite.
+https://www.gnu.org/software/automake/manual/html_node/Tests.html
+
+These Tests are NOT meant to be compiled and used in a production installation.
+They are meant to be utilized only in development builds, typically a programmer's
+personal computer working directly on rivendell source code.
+
+Testing is not built by default. these steps must be taken before
+testing can be done on a local development enviornment.
+
+
+1. googletest framework must be installed on the development enviornment
+2. `./configure_build.sh --enable-testing`
+
+This can be followed by the `make test` command where one would normally execute `make` or `make install`
+
+
