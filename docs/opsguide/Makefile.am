@@ -64,6 +64,7 @@ OPSGUIDE_HTML = appendix.file_metadata.html\
                 sect.gpio_switcher_devices.btsrc16.html\
                 sect.gpio_switcher_devices.btss124.html\
                 sect.gpio_switcher_devices.btss164.html\
+                sect.gpio_switcher_devices.btss21.html\
                 sect.gpio_switcher_devices.btss41mlr.html\
                 sect.gpio_switcher_devices.btss42.html\
                 sect.gpio_switcher_devices.btss44.html\
@@ -93,6 +94,7 @@ OPSGUIDE_HTML = appendix.file_metadata.html\
                 sect.gpio_switcher_devices.wheatnet_lio.html\
                 sect.gpio_switcher_devices.wheatnet_slio.html\
                 sect.gplv2.how_to_apply_these_terms_to_your_new_programs.html\
+                sect.rdadmin.configuring_webget.html\
                 sect.rdadmin.manage_groups.html\
                 sect.rdadmin.manage_hosts.html\
                 sect.rdadmin.manage_replicators.html\
@@ -100,6 +102,7 @@ OPSGUIDE_HTML = appendix.file_metadata.html\
                 sect.rdadmin.manage_services.html\
                 sect.rdadmin.manage_system_settings.html\
                 sect.rdadmin.managing_users.html\
+                sect.rdadmin.managing_voicetracking.html\
                 sect.rdairplay.editing_a_log.html\
                 sect.rdairplay.layout.html\
                 sect.rdairplay.log_machines.html\
@@ -115,6 +118,7 @@ OPSGUIDE_HTML = appendix.file_metadata.html\
                 sect.rdcatch.automating_recordings.html\
                 sect.rdcatch.automating_switcher_operations.html\
                 sect.rdcatch.automating_uploads_downloads.html\
+                sect.rdcatch.daylight_saving_time_considerations.html\
                 sect.rdcatch.the_rdcatch_main_window.html\
                 sect.rddbconfig.backing_up_the_database.html\
                 sect.rddbconfig.creating_a_new_database.html\
@@ -138,13 +142,18 @@ OPSGUIDE_HTML = appendix.file_metadata.html\
                 sect.rml.command_delivery.html\
                 sect.rml.command_reply.html\
                 sect.rml.commands.html\
+                sect.rml.jack_port_names.html\
+                sect.rml.log_machines.html\
                 sect.rml.protocol.html\
                 sect.rml.specifying_color.html\
+                sect.ssh_keys.generating_the_keys.html\
+                sect.ssh_keys.requirements.html\
                 sect.utilities.mlsend_1_.html\
                 sect.utilities.rdconvert.html\
                 sect.utilities.rddbmgr.html\
                 sect.utilities.rdexport.html\
                 sect.utilities.rdimport.html\
+                sect.utilities.rdlogmanager.html\
                 sect.utilities.rdmarkerset.html\
                 sect.wings_filter.procedure.html\
                 sect.wings_filter.usage.html\
