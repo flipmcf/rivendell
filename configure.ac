@@ -554,12 +554,11 @@ AC_SUBST(RPM_DATESTAMP,`date +%a\ %b\ %d\ %Y`)
 #
 PKG_CHECK_MODULES(GOOGLETEST, [gtest_main], [GTEST_FOUND=yes],[GTEST_NOT_FOUND=yes])
 if [[ "$TEST_ENABLED" == "yes" ]]; then
-  if test -z $GTEST_FOUND ; then
-    AC_MSG_ERROR([*** googletest not found, but is needed for testing support ***])
+  if test $GTEST_FOUND ; then
+    AC_MSG_NOTICE([ gtest cflags $GOOGLETEST_CFLAGS])
+    AC_MSG_NOTICE([ gtest libs $GOOGLETEST_LIBS ])
   else
-    AC_CONFIG_FILES([
-        tests/lib/Makefile \
-    ])
+    AC_MSG_ERROR([*** googletest not found, but is needed for testing support ***])
   fi
 fi
   

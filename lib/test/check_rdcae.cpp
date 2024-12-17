@@ -1,10 +1,27 @@
 
-#include "gtest/gtest.h"
+/* compile with
+
+gcc -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
+
+*/
+
+#include <gtest/gtest.h>
+#include <qobject.h>
+#include "rdcae.h"
 
 
+class MockStation : public RDStation {
+
+};
 
 TEST(RdcaeTest, connectHost){
-    FAIL();
+
+    MockStation *dummy_station;
+    RDConfig *dummy_config;
+    QObject *dummy_parent = 0;
+
+    QObject *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
+
 }
 
 TEST(RdcaeTest, enableMetering){
