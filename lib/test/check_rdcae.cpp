@@ -1,12 +1,20 @@
 
 /* compile with
 
-gcc -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
+g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
 
+g++ check_rdcae.o -o check_rdcae -lgtest -lgtest_main -lstdc++ -shared-libgcc -lm -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -L../.libs -lrd
+
+pkg-config --libs Qt5Core Qt5Widgets Qt5Network
+
+maybe add ../.libs/rdcae.o to the list of object files during linking?
+
+Run with:
+check_rdcae
 */
 
 #include <gtest/gtest.h>
-#include <qobject.h>
+#include <QObject>
 #include "rdcae.h"
 
 
@@ -22,6 +30,7 @@ TEST(RdcaeTest, connectHost){
 
     QObject *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
 
+    SUCCEED();
 }
 
 TEST(RdcaeTest, enableMetering){
