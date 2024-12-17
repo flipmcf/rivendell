@@ -39,8 +39,8 @@
 ## 3. READ https://google.github.io/googletest/primer.html (syntax of test cases & test suites)
 ## READ AUTOMAKE example here https://ethz-adrl.github.io/ct/ct_core/doc/html/md__home_adrl_code_src_control-toolbox_ct_core_build_test_googletest-src_googletest_docs_Pkgconfig.html
 
-##gcc -c check_rdlib.o
-##gcc check_rdlib.o -o check_rdlib -xc++ -lgtest -lgtest_main -lstdc++ -shared-libgcc -lm
+##gcc -c check_rdcae.o
+##gcc check_rdcae.o -o check_rdcae -xc++ -lgtest -lgtest_main -lstdc++ -shared-libgcc -lm
 
 
 # Instructions to make gtest library.
