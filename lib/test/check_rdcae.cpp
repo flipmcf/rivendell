@@ -3,8 +3,7 @@
 
 g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
 
-g++ check_rdcae.o -o check_rdcae -lgtest -lgtest_main -lstdc++ -shared-libgcc -lm -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -L../.libs -lrd
-
+g++ check_rdcae.o -o check_rdcae -lgtest -lgtest_main -lm -lpthread /home/rd/repos/rivendell/lib/.libs/librd.so -lcurl /usr/lib/x86_64-linux-gnu/libid3.so -ltag -lFLAC -lFLAC++ -lsndfile -lcdda_interface -lcdda_paranoia -lcrypt -ldl -lpam -lSoundTouch -lcrypto -lasound /home/rd/repos/rivendell/rdhpi/.libs/librdhpi.so -lhpi -ljack -lsamplerate -lvorbisfile -lvorbisenc -lQt5Sql -lQt5Xml -lQt5WebKitWidgets -lQt5Widgets -lQt5WebKit -lQt5Gui -lQt5Network -lQt5Core -ldiscid -lmusicbrainz5cc -lcoverartcc /usr/lib/x86_64-linux-gnu/libMagick++-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickCore-6.Q16.so -L../lib -L../rdhpi -fopenmp -pthread
 pkg-config --libs Qt5Core Qt5Widgets Qt5Network
 
 maybe add ../.libs/rdcae.o to the list of object files during linking?
