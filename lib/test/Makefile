@@ -52,13 +52,13 @@ CC=g++
 CFLAGS=-I.
 TESTS=check_rdlib
 
-## This is a great, simple test target example... The test file, and the file being teste
+## This is a great, simple test target example... The test file, and the file being tested
 
 rdcae: ../rdcae.cpp
 		cd .. && make && cd test
 
 test_rdcae: check_rdcae.cpp rdcae
-		$(CC) check_rdcae.cpp -o check_rdcae \
+		$(CC) -g check_rdcae.cpp -o check_rdcae \
 		-fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 \
 		-I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork \
 		-I/usr/include/x86_64-linux-gnu/qt5/QtCore -lgtest -lgtest_main -lm \
@@ -73,7 +73,7 @@ test_rdcae: check_rdcae.cpp rdcae
 
 
 check: test_rdcae
-	EXPORT LD_LIBRARY_PATH=/home/rd/repos/rivendell/lib/.lib
+	export LD_LIBRARY_PATH=/home/rd/repos/rivendell/lib/.lib
 	./check_rdcae
 
 # #this compiles the entire set of tests and suites and fixtures and everything.
