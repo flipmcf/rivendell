@@ -16,10 +16,35 @@ check_rdcae
 #include <QObject>
 #include "rdcae.h"
 
+class Environment : public ::testing::Environment {
+  public:
+    ~Environment() override {}
+
+  // Override this to define how to set up the environment.
+  void SetUp() override {}
+
+  // Override this to define how to tear down the environment.
+  void TearDown() override {}
+
+
+};
 
 class MockStation : public RDStation {
 
 };
+
+TEST(RdcaeTest, Construct){
+
+    MockStation *dummy_station;
+    RDConfig *dummy_config;
+    QObject *dummy_parent = 0;
+    printf("calling constructor\n");
+    
+    QObject *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
+    printf("constructed \n");
+    delete test_object;
+    SUCCEED();
+}
 
 TEST(RdcaeTest, connectHost){
 
