@@ -19,61 +19,76 @@
 ##   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ##
 ##
-## Use automake to process this into a Makefile.in
 
 
-## Notes for setting up googletest on Ubuntu 22.02
 
 # Instructions to make gtest library.
 #
+# ## Notes for setting up googletest on Ubuntu 22.02
 
-## 1. Get googletest ubuntu package and cmake
+## 1. Getubuntu packages
 ## 1. sudo apt install googletest
 ## 2. sudo apt install cmake 
 
+## Setup:
+##  create a simlink to the googletest src so future devs can use a custom src
+## mkdir $(top_srcdir)/googletest
+## ln -s /usr/src/googletest src
+##  create a rivendell-specific build / binary directory for builds of googletest to link rivendell against
+## mkdir $(top_srcdir)/googletest
+##  
+
+
 ## 2. Build
-## sudo mkdir /usr/local/lib/googletest   (this is your build directory)
-## cd /usr/local/lib/googletest
-## sudo cmake /usr/src/googletest  (sudo, so you can write to builddir)
-## sudo make (same reason)
+## cd $(top_srcdir)/googletest
+## cmake -DCMAKE_INSTALL_PREFIX:PATH=. src
+## make
 ## sudo make install (mostly just updates pkgconfig)
 
 ## 2. READ /usr/share/doc/googletest
 ## 3. READ https://google.github.io/googletest/primer.html (syntax of test cases & test suites)
 ## READ AUTOMAKE example here https://ethz-adrl.github.io/ct/ct_core/doc/html/md__home_adrl_code_src_control-toolbox_ct_core_build_test_googletest-src_googletest_docs_Pkgconfig.html
 
-## g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
+## g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I../lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
 
 ## g++ check_rdcae.o -o check_rdcae -lgtest -lgtest_main -lm -lpthread /home/rd/repos/rivendell/lib/.libs/librd.so -lcurl /usr/lib/x86_64-linux-gnu/libid3.so -ltag -lFLAC -lFLAC++ -lsndfile -lcdda_interface -lcdda_paranoia -lcrypt -ldl -lpam -lSoundTouch -lcrypto -lasound /home/rd/repos/rivendell/rdhpi/.libs/librdhpi.so -lhpi -ljack -lsamplerate -lvorbisfile -lvorbisenc -lQt5Sql -lQt5Xml -lQt5WebKitWidgets -lQt5Widgets -lQt5WebKit -lQt5Gui -lQt5Network -lQt5Core -ldiscid -lmusicbrainz5cc -lcoverartcc /usr/lib/x86_64-linux-gnu/libMagick++-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickCore-6.Q16.so -L../lib -L../rdhpi -fopenmp -pthread
 ## pkg-config --libs Qt5Core Qt5Widgets Qt5Network
-
 
 CC=g++
 CFLAGS=-I.
 TESTS=check_rdlib
 
+top_srcdir=/home/mcfaddenm/repos/rivendell
+
+GTEST_LIB=$(top_srcdir)/googletest/lib
+GTEST_INCLUDE=$(top_srcdir)/googletest/include
+GTEST_SRC=$(top_srcdir)/googletest/src
+
 ## This is a great, simple test target example... The test file, and the file being tested
 
-rdcae: ../rdcae.cpp
+rdcae: $(top_srcdir)/lib/rdcae.cpp
 		cd .. && make && cd test
 
 test_rdcae: check_rdcae.cpp rdcae
 		$(CC) -g check_rdcae.cpp -o check_rdcae \
-		-fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 \
+		$(top_srcdir)/lib/rdcae.o $(top_srcdir)/lib/.libs/librd.so \
+		-fPIC -I$(top_srcdir)/lib -I/usr/include/x86_64-linux-gnu/qt5 \
 		-I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork \
-		-I/usr/include/x86_64-linux-gnu/qt5/QtCore -lgtest -lgtest_main -lm \
-		-lpthread /home/rd/repos/rivendell/lib/.libs/librd.so -lcurl \
+		-I/usr/include/x86_64-linux-gnu/qt5/QtCore -I$(GTEST_INCLUDE) -lgtest -lgtest_main -lm \
+		-lpthread  -lcurl \
 		/usr/lib/x86_64-linux-gnu/libid3.so -ltag -lFLAC -lFLAC++ \
 		-lsndfile -lcdda_interface -lcdda_paranoia -lcrypt -ldl -lpam \
-		-lSoundTouch -lcrypto -lasound /home/rd/repos/rivendell/rdhpi/.libs/librdhpi.so -lhpi -ljack \
+		-lSoundTouch -lcrypto -lasound ../../rdhpi/.libs/librdhpi.so -lhpi -ljack \
 		-lsamplerate -lvorbisfile -lvorbisenc -lQt5Sql -lQt5Xml -lQt5WebKitWidgets -lQt5Widgets -lQt5WebKit \
 		-lQt5Gui -lQt5Network -lQt5Core -ldiscid -lmusicbrainz5cc -lcoverartcc /usr/lib/x86_64-linux-gnu/libMagick++-6.Q16.so \
 		/usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickCore-6.Q16.so \
-		-L../lib/.libs/rdcae.o -L../lib/.libs -L../rdhpi -fopenmp -pthread
+		-L$(top_srcdir)/rdhpi \
+		-L$(GTEST_LIB) \
+		-fopenmp -pthread
 
 
 check: test_rdcae
-	export LD_LIBRARY_PATH=/home/rd/repos/rivendell/lib/.lib
+	export LD_LIBRARY_PATH=$(top_srcdir)/lib/.lib
 	./check_rdcae
 
 # #this compiles the entire set of tests and suites and fixtures and everything.

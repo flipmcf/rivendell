@@ -12,7 +12,7 @@ Run with:
 check_rdcae
 */
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include <QObject>
 #include "rdcae.h"
 
