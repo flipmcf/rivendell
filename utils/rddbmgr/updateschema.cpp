@@ -6845,7 +6845,12 @@ bool MainObject::UpdateSchema(int cur_schema,int set_schema,QString *err_msg)
     WriteSchemaVersion(++cur_schema);
   }
 
-  if((cur_schema<276)&&(set_schema>cur_schema)) { 
+  if((cur_schema<276)&&(set_schema>cur_schema)) {
+    NormalizeMetatables276("CLK",err_msg);
+    NormalizeMetatables276("RULES",err_msg);
+    NormalizeMetatables276("PRE",err_msg);
+    NormalizeMetatables276("POST",err_msg);
+    NormalizeMetatables276("SRT",err_msg);
     sql=QString("alter table `SYSTEM` ")+
       "add column `NOTIFICATION_ADDRESS` char(15) default '"+
       RD_NOTIFICATION_ADDRESS+"' after `SHOW_USER_LIST`";
@@ -11697,6 +11702,44 @@ bool MainObject::ConvertTimeField186(const QString &table,const QString &field,
   sql=QString("alter table `")+table+"` drop column `"+field+"_TEMP`";
   if(!RDSqlQuery::apply(sql,err_msg)) {
     return false;
+  }
+
+  return true;
+}
+
+
+bool MainObject::NormalizeMetatables276(const QString &table_ext,
+					QString *err_msg) const
+{
+  QStringList tables;
+  QString sql=QString("show tables");
+  RDSqlQuery *q=new RDSqlQuery(sql);
+  while(q->next()) {
+    tables.push_back(q->value(0).toString());
+  }
+  delete q;
+
+  for(int i=0;i<tables.size();i++) {
+    QString new_name=tables.at(i);
+    while(new_name.contains("__"+table_ext)) {
+      new_name.replace("__"+table_ext,"_"+table_ext);
+    }
+    if(new_name!=tables.at(i)) {
+      if(tables.contains(new_name)) {
+	DropTable(tables.at(i));
+	fprintf(stderr,"rddbmgr: dropping duplicate table '%s'\n",
+		tables.at(i).toUtf8().constData());
+      }
+      else {
+	sql=QString::asprintf("rename table %s to %s",
+			      tables.at(i).toUtf8().constData(),
+			      new_name.toUtf8().constData());
+	RDSqlQuery::apply(sql);
+	fprintf(stderr,"rddbmgr: renamed table '%s' to '%s'\n",
+		tables.at(i).toUtf8().constData(),
+		new_name.toUtf8().constData());
+      }
+    }
   }
 
   return true;
