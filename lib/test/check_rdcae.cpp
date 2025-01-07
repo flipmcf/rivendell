@@ -13,7 +13,6 @@ check_rdcae
 */
 
 #include "gtest/gtest.h"
-#include <QObject>
 #include "rdcae.h"
 
 class Environment : public ::testing::Environment {
@@ -21,7 +20,9 @@ class Environment : public ::testing::Environment {
     ~Environment() override {}
 
   // Override this to define how to set up the environment.
-  void SetUp() override {}
+  void SetUp() override {
+  
+  }
 
   // Override this to define how to tear down the environment.
   void TearDown() override {}
@@ -33,10 +34,16 @@ class MockStation : public RDStation {
 
 };
 
-TEST(RdcaeTest, Construct){
+class MockRDConfig : public RDConfig {
 
+
+};MockStation *dummy_station;
+    RDConfig *dummy_config = new RDConfig();
+    QObject *dummy_parent = 0;
+
+TEST(RdcaeTest, Construct){
     MockStation *dummy_station;
-    RDConfig *dummy_config;
+    RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
     printf("calling constructor\n");
     
@@ -49,10 +56,13 @@ TEST(RdcaeTest, Construct){
 TEST(RdcaeTest, connectHost){
 
     MockStation *dummy_station;
-    RDConfig *dummy_config;
+    RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
+    QString *error_msg = new QString();
 
-    QObject *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
+    RDCae *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
+    
+    test_object->connectHost(error_msg);
 
     SUCCEED();
 }

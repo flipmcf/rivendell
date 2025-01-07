@@ -48,6 +48,7 @@
 ## 2. READ /usr/share/doc/googletest
 ## 3. READ https://google.github.io/googletest/primer.html (syntax of test cases & test suites)
 ## READ AUTOMAKE example here https://ethz-adrl.github.io/ct/ct_core/doc/html/md__home_adrl_code_src_control-toolbox_ct_core_build_test_googletest-src_googletest_docs_Pkgconfig.html
+## READ QT Unit testing: https://contribute.qt-project.org/wiki/Writing_Unit_Tests
 
 ## g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I../lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
 
