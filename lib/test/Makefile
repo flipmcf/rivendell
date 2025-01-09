@@ -48,7 +48,9 @@
 ## 2. READ /usr/share/doc/googletest
 ## 3. READ https://google.github.io/googletest/primer.html (syntax of test cases & test suites)
 ## READ AUTOMAKE example here https://ethz-adrl.github.io/ct/ct_core/doc/html/md__home_adrl_code_src_control-toolbox_ct_core_build_test_googletest-src_googletest_docs_Pkgconfig.html
-## READ QT Unit testing: https://contribute.qt-project.org/wiki/Writing_Unit_Tests
+## READ QT Unit testing: https://doc.qt.io/qt-5/qttest-index.html
+##                       https://doc.qt.io/qt-5/qttestlib-tutorial1-example.html
+
 
 ## g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I../lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
 
@@ -65,11 +67,14 @@ GTEST_LIB=$(top_srcdir)/googletest/lib
 GTEST_INCLUDE=$(top_srcdir)/googletest/include
 GTEST_SRC=$(top_srcdir)/googletest/src
 
-## This is a great, simple test target example... The test file, and the file being tested
+## This is a great, simple test target example... 
+
+## 1. a target for the file being tested
 
 rdcae: $(top_srcdir)/lib/rdcae.cpp
 		cd .. && make && cd test
 
+## 2. A target for the test suite testing #1
 test_rdcae: check_rdcae.cpp rdcae
 		$(CC) -g check_rdcae.cpp -o check_rdcae \
 		$(top_srcdir)/lib/rdcae.o $(top_srcdir)/lib/.libs/librd.so \

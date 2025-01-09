@@ -1,34 +1,12 @@
 
-/* compile with
-
-g++ -c check_rdcae.cpp -o check_rdcae.o -fPIC -I/home/rd/repos/rivendell/lib -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore
-
-g++ check_rdcae.o -o check_rdcae -lgtest -lgtest_main -lm -lpthread /home/rd/repos/rivendell/lib/.libs/librd.so -lcurl /usr/lib/x86_64-linux-gnu/libid3.so -ltag -lFLAC -lFLAC++ -lsndfile -lcdda_interface -lcdda_paranoia -lcrypt -ldl -lpam -lSoundTouch -lcrypto -lasound /home/rd/repos/rivendell/rdhpi/.libs/librdhpi.so -lhpi -ljack -lsamplerate -lvorbisfile -lvorbisenc -lQt5Sql -lQt5Xml -lQt5WebKitWidgets -lQt5Widgets -lQt5WebKit -lQt5Gui -lQt5Network -lQt5Core -ldiscid -lmusicbrainz5cc -lcoverartcc /usr/lib/x86_64-linux-gnu/libMagick++-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so /usr/lib/x86_64-linux-gnu/libMagickCore-6.Q16.so -L../lib -L../rdhpi -fopenmp -pthread
-pkg-config --libs Qt5Core Qt5Widgets Qt5Network
-
-maybe add ../.libs/rdcae.o to the list of object files during linking?
-
-Run with:
-check_rdcae
-*/
-
 #include "gtest/gtest.h"
+#include <QTest>
 #include "rdcae.h"
 
-class Environment : public ::testing::Environment {
-  public:
-    ~Environment() override {}
-
-  // Override this to define how to set up the environment.
-  void SetUp() override {
-  
-  }
-
-  // Override this to define how to tear down the environment.
-  void TearDown() override {}
-
-
-};
+namespace rd {
+namespace lib {
+namespace rdcae {
+namespace {
 
 class MockStation : public RDStation {
 
@@ -36,12 +14,39 @@ class MockStation : public RDStation {
 
 class MockRDConfig : public RDConfig {
 
+};
 
-};MockStation *dummy_station;
+//Fixture
+class RDCaeTest : public ::testing::Test {
+  protected:
+    RDCaeTest() {
+        //init the QObject just enough to run it.
+        // Thread here?  Probably not.
+    }
+
+    MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
 
-TEST(RdcaeTest, Construct){
+  public:
+    ~RDCaeTest override {
+        //destory the QObject.
+    }
+
+  // Override this to define how to set up the environment.
+  void SetUp() override {
+    //QObject thread can be created here
+  }
+
+  // Override this to define how to tear down the environment.
+  void TearDown() override {
+    //QObject thread is cleanly destroyed here.
+  }
+
+
+};
+
+TEST_F(RdCaeTest, Construct){
     MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
@@ -53,151 +58,162 @@ TEST(RdcaeTest, Construct){
     SUCCEED();
 }
 
-TEST(RdcaeTest, connectHost){
+TEST_F(RdCaeTest, connectHost){
 
     MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
     QString *error_msg = new QString();
+    bool result;
 
     RDCae *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
     
-    test_object->connectHost(error_msg);
+    result = test_object->connectHost(error_msg);
 
     SUCCEED();
 }
 
-TEST(RdcaeTest, enableMetering){
+TEST_F(RdCaeTest, enableMetering){
     FAIL();
 }
 
-TEST(RdcaeTest, loadPlay){
+TEST_F(RdCaeTest, loadPlay){
+    FAIL();
+}
+TEST_F(RdCaeTest, unloadPlay){
     FAIL();
 }
 
-TEST(RdcaeTest, unloadPlay){
+TEST_F(RdCaeTest, positionPlay){
     FAIL();
 }
 
-TEST(RdcaeTest, positionPlay){
+TEST_F(RdCaeTest, play){
     FAIL();
 }
 
-TEST(RdcaeTest, play){
+TEST_F(RdCaeTest, stopPlay){
     FAIL();
 }
 
-TEST(RdcaeTest, stopPlay){
+TEST_F(RdCaeTest, loadRecord){
     FAIL();
 }
 
-
-TEST(RdcaeTest, loadRecord){
+TEST_F(RdCaeTest, unloadRecord){
     FAIL();
 }
 
-
-TEST(RdcaeTest, unloadRecord){
+TEST_F(RdCaeTest, record){
     FAIL();
 }
 
-TEST(RdcaeTest, record){
+TEST_F(RdCaeTest, stopRecord){
     FAIL();
 }
 
-TEST(RdcaeTest, stopRecord){
+TEST_F(RdCaeTest, setClockSource){
     FAIL();
 }
 
-TEST(RdcaeTest, setClockSource){
+TEST_F(RdCaeTest, setInputVolume){
     FAIL();
 }
 
-TEST(RdcaeTest, setInputVolume){
+TEST_F(RdCaeTest, setOutputVolume){
     FAIL();
 }
 
-TEST(RdcaeTest, setOutputVolume){
+TEST_F(RdCaeTest, fadeOutputVolume){
     FAIL();
 }
 
-TEST(RdcaeTest, fadeOutputVolume){
+TEST_F(RdCaeTest, setInputLevel){
     FAIL();
 }
 
-TEST(RdcaeTest, setInputLevel){
+TEST_F(RdCaeTest, setOutputLevel){
     FAIL();
 }
 
-TEST(RdcaeTest, setOutputLevel){
+TEST_F(RdCaeTest, setInputMode){
     FAIL();
 }
 
-TEST(RdcaeTest, setInputMode){
+TEST_F(RdCaeTest, setOutputMode){
     FAIL();
 }
 
-TEST(RdcaeTest, setOutputMode){
+TEST_F(RdCaeTest, setInputVOXLevel){
     FAIL();
 }
 
-TEST(RdcaeTest, setInputVOXLevel){
+TEST_F(RdCaeTest, setInputType){
     FAIL();
 }
 
-TEST(RdcaeTest, setInputType){
+TEST_F(RdCaeTest, setPassthroughVolume){
     FAIL();
 }
 
-TEST(RdcaeTest, setPassthroughVolume){
+TEST_F(RdCaeTest, inputStatus){
     FAIL();
 }
 
-TEST(RdcaeTest, inputStatus){
+TEST_F(RdCaeTest, inputMeterUpdate){
     FAIL();
 }
 
-TEST(RdcaeTest, inputMeterUpdate){
+TEST_F(RdCaeTest, outputMeterUpdate){
     FAIL();
 }
 
-TEST(RdcaeTest, outputMeterUpdate){
+TEST_F(RdCaeTest, outputStreamMeterUpdate){
     FAIL();
 }
 
-TEST(RdcaeTest, outputStreamMeterUpdate){
+TEST_F(RdCaeTest, playPosition){
     FAIL();
 }
 
-TEST(RdcaeTest, playPosition){
+TEST_F(RdCaeTest, requestTimescale){
     FAIL();
 }
 
-TEST(RdcaeTest, requestTimescale){
+TEST_F(RdCaeTest, playPortStatus){
     FAIL();
 }
 
-TEST(RdcaeTest, playPortStatus){
+TEST_F(RdCaeTest, readyData){
     FAIL();
 }
 
-TEST(RdcaeTest, readyData){
+TEST_F(RdCaeTest, SendCommand){
     FAIL();
 }
 
-TEST(RdcaeTest, SendCommand){
+TEST_F(RdCaeTest, DispatchCommand){
     FAIL();
 }
 
-TEST(RdcaeTest, DispatchCommand){
+TEST_F(RdCaeTest, UpdateMeters){
     FAIL();
 }
 
-
-TEST(RdcaeTest, UpdateMeters){
+TEST_F(RdCaeTest, SerialCheck){
     FAIL();
 }
 
-TEST(RdcaeTest, SerialCheck){
-    FAIL();
+}  // namespace
+}  // namespace rdcae
+}  // namespace lib
+}  // namespace rd
+
+
+int main(int argc, char **argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
+
+QTEST_MAIN(TestQString)
+#include "testqstring.moc"
