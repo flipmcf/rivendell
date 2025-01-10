@@ -16,6 +16,18 @@ class MockRDConfig : public RDConfig {
 
 };
 
+class TestingThread : public QThread {
+public:
+    void run() override {
+        QMutexLocker locker(&mutex);
+        // Do some work in the thread
+        condition.wakeOne();
+    }
+
+    QMutex mutex;
+    QWaitCondition condition;
+};
+
 //Fixture
 class RDCaeTest : public ::testing::Test {
   protected:
