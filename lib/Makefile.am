@@ -38,8 +38,6 @@ uninstall-local:
 all:	
 	../helpers/rdi18n_helper.sh --update librd $(DESTDIR)$(prefix)/share/rivendell
 
-SUBDIRS = test
-
 lib_LTLIBRARIES = librd.la
 dist_librd_la_SOURCES = dbversion.h\
                         gpio.h\
