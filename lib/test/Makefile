@@ -61,11 +61,13 @@ CC=g++
 CFLAGS=-I.
 TESTS=check_rdlib
 
-top_srcdir=/home/mcfaddenm/repos/rivendell
+top_srcdir=/home/rd/repos/rivendell
 
 GTEST_LIB=$(top_srcdir)/googletest/lib
 GTEST_INCLUDE=$(top_srcdir)/googletest/include
 GTEST_SRC=$(top_srcdir)/googletest/src
+
+QTEST=/usr/include/x86_64-linux-gnu/qt5/QtTest
 
 ## This is a great, simple test target example... 
 
@@ -75,12 +77,13 @@ rdcae: $(top_srcdir)/lib/rdcae.cpp
 		cd .. && make && cd test
 
 ## 2. A target for the test suite testing #1
+
 test_rdcae: check_rdcae.cpp rdcae
 		$(CC) -g check_rdcae.cpp -o check_rdcae \
 		$(top_srcdir)/lib/rdcae.o $(top_srcdir)/lib/.libs/librd.so \
 		-fPIC -I$(top_srcdir)/lib -I/usr/include/x86_64-linux-gnu/qt5 \
 		-I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork \
-		-I/usr/include/x86_64-linux-gnu/qt5/QtCore -I$(GTEST_INCLUDE) -lgtest -lgtest_main -lm \
+		-I/usr/include/x86_64-linux-gnu/qt5/QtCore -I$(QTEST) -I$(GTEST_INCLUDE) -lgtest -lgtest_main -lm \
 		-lpthread  -lcurl \
 		/usr/lib/x86_64-linux-gnu/libid3.so -ltag -lFLAC -lFLAC++ \
 		-lsndfile -lcdda_interface -lcdda_paranoia -lcrypt -ldl -lpam \
