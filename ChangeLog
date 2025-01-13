@@ -24941,3 +24941,9 @@
 2024-11-05 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in the 'make install' target that failed to install
 	the rdautocheck(8) script.
+2024-12-13 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed regression in the build system that caused sections of the
+	HTML version of Operations Guide to be missing.
+2024-12-20 Fred Gleason <fredg@paravelsystems.com>
+	* Added code at the 275=>276 schema transition in rddbmgr(8) to
+	clean up corrupted meta-tables.
