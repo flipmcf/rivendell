@@ -2,6 +2,11 @@
 #include "gtest/gtest.h"
 #include <QTest>
 #include "rdcae.h"
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
+
+// https://doc.qt.io/qt-5/qthread.html
 
 namespace rd {
 namespace lib {
@@ -21,7 +26,7 @@ public:
     void run() override {
         QMutexLocker locker(&mutex);
         // Do some work in the thread
-        condition.wakeOne();
+        emit resultReady(result)
     }
 
     QMutex mutex;
@@ -41,7 +46,7 @@ class RDCaeTest : public ::testing::Test {
     QObject *dummy_parent = 0;
 
   public:
-    ~RDCaeTest override {
+    ~RDCaeTest() override {
         //destory the QObject.
     }
 
@@ -58,7 +63,7 @@ class RDCaeTest : public ::testing::Test {
 
 };
 
-TEST_F(RdCaeTest, Construct){
+TEST(RdCaeTest, Construct){
     MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
@@ -70,7 +75,10 @@ TEST_F(RdCaeTest, Construct){
     SUCCEED();
 }
 
-TEST_F(RdCaeTest, connectHost){
+TEST(RdCaeTest, connectHost){
+
+    TestingThread thread;
+    thread.start();
 
     MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
@@ -82,137 +90,140 @@ TEST_F(RdCaeTest, connectHost){
     
     result = test_object->connectHost(error_msg);
 
+    QMutexLocker locker(&thread.mutex);
+    thread.condition.wait(&thread.mutex);
+
     SUCCEED();
 }
 
-TEST_F(RdCaeTest, enableMetering){
+TEST(RdCaeTest, enableMetering){
     FAIL();
 }
 
-TEST_F(RdCaeTest, loadPlay){
+TEST(RdCaeTest, loadPlay){
     FAIL();
 }
-TEST_F(RdCaeTest, unloadPlay){
-    FAIL();
-}
-
-TEST_F(RdCaeTest, positionPlay){
+TEST(RdCaeTest, unloadPlay){
     FAIL();
 }
 
-TEST_F(RdCaeTest, play){
+TEST(RdCaeTest, positionPlay){
     FAIL();
 }
 
-TEST_F(RdCaeTest, stopPlay){
+TEST(RdCaeTest, play){
     FAIL();
 }
 
-TEST_F(RdCaeTest, loadRecord){
+TEST(RdCaeTest, stopPlay){
     FAIL();
 }
 
-TEST_F(RdCaeTest, unloadRecord){
+TEST(RdCaeTest, loadRecord){
     FAIL();
 }
 
-TEST_F(RdCaeTest, record){
+TEST(RdCaeTest, unloadRecord){
     FAIL();
 }
 
-TEST_F(RdCaeTest, stopRecord){
+TEST(RdCaeTest, record){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setClockSource){
+TEST(RdCaeTest, stopRecord){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setInputVolume){
+TEST(RdCaeTest, setClockSource){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setOutputVolume){
+TEST(RdCaeTest, setInputVolume){
     FAIL();
 }
 
-TEST_F(RdCaeTest, fadeOutputVolume){
+TEST(RdCaeTest, setOutputVolume){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setInputLevel){
+TEST(RdCaeTest, fadeOutputVolume){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setOutputLevel){
+TEST(RdCaeTest, setInputLevel){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setInputMode){
+TEST(RdCaeTest, setOutputLevel){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setOutputMode){
+TEST(RdCaeTest, setInputMode){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setInputVOXLevel){
+TEST(RdCaeTest, setOutputMode){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setInputType){
+TEST(RdCaeTest, setInputVOXLevel){
     FAIL();
 }
 
-TEST_F(RdCaeTest, setPassthroughVolume){
+TEST(RdCaeTest, setInputType){
     FAIL();
 }
 
-TEST_F(RdCaeTest, inputStatus){
+TEST(RdCaeTest, setPassthroughVolume){
     FAIL();
 }
 
-TEST_F(RdCaeTest, inputMeterUpdate){
+TEST(RdCaeTest, inputStatus){
     FAIL();
 }
 
-TEST_F(RdCaeTest, outputMeterUpdate){
+TEST(RdCaeTest, inputMeterUpdate){
     FAIL();
 }
 
-TEST_F(RdCaeTest, outputStreamMeterUpdate){
+TEST(RdCaeTest, outputMeterUpdate){
     FAIL();
 }
 
-TEST_F(RdCaeTest, playPosition){
+TEST(RdCaeTest, outputStreamMeterUpdate){
     FAIL();
 }
 
-TEST_F(RdCaeTest, requestTimescale){
+TEST(RdCaeTest, playPosition){
     FAIL();
 }
 
-TEST_F(RdCaeTest, playPortStatus){
+TEST(RdCaeTest, requestTimescale){
     FAIL();
 }
 
-TEST_F(RdCaeTest, readyData){
+TEST(RdCaeTest, playPortStatus){
     FAIL();
 }
 
-TEST_F(RdCaeTest, SendCommand){
+TEST(RdCaeTest, readyData){
     FAIL();
 }
 
-TEST_F(RdCaeTest, DispatchCommand){
+TEST(RdCaeTest, SendCommand){
     FAIL();
 }
 
-TEST_F(RdCaeTest, UpdateMeters){
+TEST(RdCaeTest, DispatchCommand){
     FAIL();
 }
 
-TEST_F(RdCaeTest, SerialCheck){
+TEST(RdCaeTest, UpdateMeters){
+    FAIL();
+}
+
+TEST(RdCaeTest, SerialCheck){
     FAIL();
 }
 
@@ -226,6 +237,3 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-
-QTEST_MAIN(TestQString)
-#include "testqstring.moc"
