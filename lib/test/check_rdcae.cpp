@@ -1,10 +1,9 @@
 
 #include "gtest/gtest.h"
-#include <QTest>
 #include "rdcae.h"
+
 #include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QTimer>
 
 // https://doc.qt.io/qt-5/qthread.html
 
@@ -21,29 +20,8 @@ class MockRDConfig : public RDConfig {
 
 };
 
-class TestingThread : public QThread {
-public:
-    void run() override {
-        QMutexLocker locker(&mutex);
-        // Do some work in the thread
-        emit resultReady(result)
-    }
-
-    QMutex mutex;
-    QWaitCondition condition;
-};
-
 //Fixture
 class RDCaeTest : public ::testing::Test {
-  protected:
-    RDCaeTest() {
-        //init the QObject just enough to run it.
-        // Thread here?  Probably not.
-    }
-
-    MockStation *dummy_station;
-    RDConfig *dummy_config = new RDConfig();
-    QObject *dummy_parent = 0;
 
   public:
     ~RDCaeTest() override {
@@ -67,34 +45,42 @@ TEST(RdCaeTest, Construct){
     MockStation *dummy_station;
     RDConfig *dummy_config = new RDConfig();
     QObject *dummy_parent = 0;
-    printf("calling constructor\n");
     
     QObject *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
-    printf("constructed \n");
+
     delete test_object;
     SUCCEED();
 }
 
-TEST(RdCaeTest, connectHost){
+class ConnectHostThread : public QThread {
+        
+protected:
+    void run() override {
+        MockStation *dummy_station;
+        RDConfig *dummy_config = new RDConfig();
+        QObject *dummy_parent = 0;
+        QString *error_msg = new QString();
+    
+        bool result;
+        RDCae *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
+        result = test_object->connectHost(error_msg);
+    }
+};
 
-    TestingThread thread;
+TEST(RdCaeTest, connectHost){
+    ConnectHostThread thread;
+
     thread.start();
 
-    MockStation *dummy_station;
-    RDConfig *dummy_config = new RDConfig();
-    QObject *dummy_parent = 0;
-    QString *error_msg = new QString();
-    bool result;
+    // Wait for the thread to finish (you might need to use a QTimer or QEventLoop here)
+    QTimer::singleShot(1000, [&]() {
+        thread.quit();
+        thread.wait();
+    });
 
-    RDCae *test_object = new RDCae(dummy_station, dummy_config, dummy_parent);
-    
-    result = test_object->connectHost(error_msg);
-
-    QMutexLocker locker(&thread.mutex);
-    thread.condition.wait(&thread.mutex);
-
-    SUCCEED();
+    ASSERT_TRUE(thread.isFinished());
 }
+
 
 TEST(RdCaeTest, enableMetering){
     FAIL();
